@@ -3,7 +3,7 @@
 module Twilito
   module API
     def send_response(args)
-      uri = messages_uri(args[:account_sid])
+      uri = messages_uri(args[:account_sid], args[:twilio_host])
 
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         req = Net::HTTP::Post.new(uri)
@@ -15,7 +15,7 @@ module Twilito
       end
     end
 
-    def messages_uri(account_sid)
+    def messages_uri(account_sid, twilio_host)
       components = [
         Configuration::TWILIO_VERSION,
         'Accounts',
@@ -24,7 +24,7 @@ module Twilito
       ]
 
       URI::HTTPS.build(
-        host: Configuration::TWILIO_HOST,
+        host: twilio_host,
         path: '/' + components.join('/')
       )
     end
@@ -32,11 +32,11 @@ module Twilito
     private
 
     # NOTE: Converts snake_cased hash of arguments to CamelCase to match Twilio
-    # API expectations. Also, removes auth_token and account_sid as those are
+    # API expectations. Also, removes auth_token, account_sid and twilito_host as those are
     # included separately in .send_response as basic auth instead of POST body
     def twilio_form_data(args)
       args
-        .merge(auth_token: nil, account_sid: nil).compact
+        .merge(auth_token: nil, account_sid: nil, twilio_host: nil).compact
         .reduce({}) { |result, (k, v)| result.merge(k.to_s.split('_').collect(&:capitalize).join => v) }
     end
 

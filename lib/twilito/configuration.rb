@@ -17,7 +17,6 @@ module Twilito
     attr_accessor :account_sid, :auth_token, :from, :to, :body,
                   :twilio_host, :twilio_version, :messaging_service_sid
 
-    TWILIO_HOST = 'api.twilio.com'
     TWILIO_VERSION = '2010-04-01'
 
     def to_h
@@ -27,7 +26,8 @@ module Twilito
         messaging_service_sid: messaging_service_sid,
         body: body,
         account_sid: account_sid,
-        auth_token: auth_token
+        auth_token: auth_token,
+        twilio_host: twilio_host || 'api.twilio.com',
       }
     end
   end

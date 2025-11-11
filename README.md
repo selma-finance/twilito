@@ -76,6 +76,8 @@ Twilito.configure do |config|
   config.auth_token = ENV['TWILIO_AUTH_TOKEN']
 
   config.from = '+16145555555'
+
+  config.twilio_host = 'api.ie1.twilio.com' # Optional, defaults to 'api.twilio.com'
 end
 ```
 
